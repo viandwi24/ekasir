@@ -1,5 +1,7 @@
 # ekasir
 
+## Api
+Lihat dokumentasi lebih lengkap di `api-docs.html`
 ```
 +-----------+------------------------------------+------------------------------------------------------------+
 | Method    | URI                                | Action                                                     |
