@@ -1,0 +1,289 @@
+#%RAML 1.0
+title: "EKASIR API"
+description: "api docs for EKASIR APP"
+version: "1.0.0"
+mediaType:
+- "application/json"
+
+
+/api/v1/auth: #u
+  displayName: "Auth"
+  description: "Authentication for user admin"
+  /login: #su
+    description: "Auth - Login"
+    post: 
+      displayName: "Auth - Login"
+      description: "Login for Admin User"
+      queryParameters:
+        email:
+          type: "string"
+          description: "Email user"
+          example: "example@mail.com"
+        password:
+          type: "string"
+          description: "Password user"
+          example: "password123"
+      responses:
+        200:
+          description: "Login Success"
+          body:
+            application/json:
+              type: "object"
+              description: "Response Auth"
+              example:
+                value: "{\n   \"access_token: \"...\",\n   \"token_type\": \"bearer\"\
+                  ,\n   \"expires_in\": 3600\n}"
+                strict: false
+        401:
+          description: "Email or Password Invalid"
+  /logout: #su
+    description: "Auth - Logout"
+    post: 
+      displayName: "Auth - Logout"
+      description: "Logout for Admin User"
+  /me: #su
+    description: "Auth - User Info"
+    post: 
+      displayName: "Auth - User Info"
+      description: "Get User Info for Admin User"
+      headers:
+        Authorization:
+          type: "string"
+          description: "token for authenticate"
+          example: "bearer eyJ0eXAiOiJKV1Q...."
+      responses:
+        200:
+          description: "success"
+          body:
+            application/json:
+              type: "object"
+              description: "return information user auth"
+              example:
+                value: "{\n\"id\": 1,\n\"nama\": \"admin1\",\n\"kelamin\": \"laki-laki\"\
+                  ,\n\"email\": \"admin1@mail.com\",\n\"email_verified_at\": null,\n\
+                  \"created_at\": \"2019-10-05 12:44:38\",\n\"updated_at\": \"2019-10-05\
+                  \ 12:44:38\"\n}"
+                strict: false
+  /register: #su
+    description: "Auth - Register"
+    post: 
+      displayName: "Auth - Register"
+      description: "Register new Admin User"
+
+
+
+#### barang #####################################################################
+/api/v1/barang: #u
+  displayName: "Barang"
+  get: #su
+    displayName: "Barang - Get All"
+    description: "Get all barang"
+    responses:
+      200:
+        description: "success"
+        body:
+          type: "object"
+          description: "return all barang"
+          example:
+            value: "[\n{\n\"id\": 2,\n\"kode\": 12345,\n\"nama\": \"tes2\",\n\"kelompok\"\
+              : \"default\",\n\"gambar\": null,\n\"keterangan\": null,\n\"satuan\"\
+              : 0,\n\"pot1\": null,\n\"pot2\": null,\n\"diskon_jual\": null,\n\"ppn\"\
+              : 0,\n\"naik\": null,\n\"harga_bruto\": 0,\n\"harga_beli\": 0,\n\"harga_jual\"\
+              : 0,\n\"harga_jual_pembulatan\": 0,\n\"stok\": 1,\n\"stok_min\": 1,\n\
+              \"created_at\": \"2019-10-05 14:55:03\",\n\"updated_at\": \"2019-10-05\
+              \ 14:55:03\"\n},\n  {\n    ...\n  }\n]"
+            strict: false
+
+  post: #su
+    displayName: "Barang - Create"
+    description: "Create or Store new Barang"
+    headers:
+      Authorization:
+        type: "string"
+        description: "token for authenticate"
+        example: "bearer eyJ0eXAiOiJKV1Q...."
+    responses:
+      200:
+        description: "success"
+        body:
+          type: "object"
+          description: "return success status"
+          example:
+            value: "{\n\"status\": \"success\",\n\"data\":{\n    \"nama\": \"example\"\
+              ,\n    \"kode\": \"12345\",\n    \"updated_at\": \"2019-10-05 14:55:03\"\
+              ,\n    \"created_at\": \"2019-10-05 14:55:03\",\n    \"id\": 1\n  }\n\
+              }"
+            strict: false
+      400:
+        description: "failed"
+        body:
+          type: "object"
+          description: "failed for create new barang"
+          example:
+            value: "{\n  \"status\"': \"error\",\n  \"error\": {\n    \"code\": 400,\n\
+              \    \"text\": \"create.failed\"\n  }\n}"
+            strict: false
+      401:
+        description: "Unauthorize"
+
+  /{id}: #su
+    uriParameters:
+      id:
+        type: "string"
+    get:
+      displayName: "Barang - Read"
+      description: "Read a Barang with id"
+      responses:
+        200:
+          description: "success"
+          body:
+            type: "object"
+            example:
+              value: "{\n\"id\": 2,\n\"kode\": 12345,\n\"nama\": \"tes2\",\n\"kelompok\"\
+                : \"default\",\n\"gambar\": null,\n\"keterangan\": null,\n\"satuan\"\
+                : 0,\n\"pot1\": null,\n\"pot2\": null,\n\"diskon_jual\": null,\n\"ppn\"\
+                : 0,\n\"naik\": null,\n\"harga_bruto\": 0,\n\"harga_beli\": 0,\n\"harga_jual\"\
+                : 0,\n\"harga_jual_pembulatan\": 0,\n\"stok\": 1,\n\"stok_min\": 1,\n\
+                \"created_at\": \"2019-10-05 14:55:03\",\n\"updated_at\": \"2019-10-05\
+                \ 14:55:03\"\n}"
+              strict: false
+        404:
+          description: "ID not found"
+    put:
+      displayName: "Barang - Update"
+      description: "Update a Barang with id"
+      queryParameters:
+        nama:
+          type: "string"
+          description: "nama barang"
+          example: "Sabun"
+          required: false
+        kelompok:
+          type: "string"
+          description: "kelompok barang"
+          example: "default"
+          required: false
+        keterangan:
+          type: "string"
+          description: "keterangan barang"
+          example: "default"
+          required: false
+        satuan:
+          type: "integer"
+          description: "satuan barang"
+          example: "0"
+          required: false
+        pot1:
+          type: "integer"
+          description: "pot1 barang"
+          example: "0"
+          required: false
+        pot2:
+          type: "integer"
+          description: "pot2 barang"
+          example: "0"
+          required: false
+        diskon_jual:
+          type: "integer"
+          description: "diskon jual barang"
+          example: "0"
+          required: false
+        ppn:
+          type: "integer"
+          description: "ppn barang"
+          example: "0"
+          required: false
+        naik:
+          type: "integer"
+          description: "naik barang"
+          example: "0"
+          required: false
+        harga_bruto:
+          type: "integer"
+          description: "harga_bruto barang"
+          example: "0"
+          required: false
+        harga_beli:
+          type: "integer"
+          description: "harga_beli barang"
+          example: "0"
+          required: false
+        harga_jual:
+          type: "integer"
+          description: "harga_jual barang"
+          example: "0"
+          required: false
+        harga_jual_pembulatan:
+          type: "integer"
+          description: "harga_jual_pembulatan barang"
+          example: "0"
+          required: false
+        stok:
+          type: "integer"
+          description: "stok barang"
+          example: "0"
+          required: false
+        stok_min:
+          type: "integer"
+          description: "stok_min barang"
+          example: "0"
+          required: false
+      headers:
+        Authorization:
+          type: "string"
+          description: "token for authenticate"
+          example: "bearer eyJ0eXAiOiJKV1Q...."
+      responses:
+        200:
+          description: "success"
+          body:
+            type: "object"
+            description: "return success status"
+            example:
+              value: "{\n  \"status\": \"success\",\n  \"data\":{\n    \"nama\": \"\
+                tes3\"\n  }\n}"
+              strict: false
+        400:
+          description: "failed"
+          body:
+            type: "object"
+            description: "failed for updating this barang"
+            example:
+              value: "{\n  \"status\"': \"error\",\n  \"error\": {\n    \"code\": 400,\n\
+                \    \"text\": \"update.failed\"\n  }\n}"
+              strict: false
+        401:
+          description: "Unauthorize"
+        404:
+          description: "ID not found"
+    delete:
+      displayName: "Barang - Delete"
+      description: "Delete a Barang with id"
+      headers:
+        Authorization:
+          type: "string"
+          description: "token for authenticate"
+          example: "bearer eyJ0eXAiOiJKV1Q...."
+      responses:
+        200:
+          description: "success"
+          body:
+            type: "object"
+            description: "Success deleting, ex delete barang where id 1"
+            example:
+              value: "{\n\"status\": \"success\",\n\"data\": \"1\"\n}"
+              strict: false
+        400:
+          description: "failed"
+          body:
+            type: "object"
+            description: "failed for deleting this barang"
+            example:
+              value: "{\n  \"status\"': \"error\",\n  \"error\": {\n    \"code\": 400,\n\
+                \    \"text\": \"delete.failed\"\n  }\n}"
+              strict: false
+        401:
+          description: "Unauthorize"
+        404:
+          description: "ID not found"
+      
